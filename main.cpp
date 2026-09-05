@@ -6,18 +6,16 @@
 #include <string>
 #include <stdexcept>
 
-namespace Enums {
-    enum class Action {
-        START,
-        STOP,
-        FORCE_STOP,
-    };
-}
+enum class Action {
+    START,
+    STOP,
+    FORCE_STOP,
+};
 
-std::optional<Enums::Action> parseAction(const std::string &action) {
-    if (action == "start") { return Enums::Action::START; }
-    if (action == "stop") { return Enums::Action::STOP; }
-    if (action == "force-stop") { return Enums::Action::FORCE_STOP; }
+std::optional<Action> parseAction(const std::string &action) {
+    if (action == "start") { return Action::START; }
+    if (action == "stop") { return Action::STOP; }
+    if (action == "force-stop") { return Action::FORCE_STOP; }
     return std::nullopt;
 }
 
@@ -74,7 +72,7 @@ int doAction(const std::string &argument, const std::string &name) {
     const auto id = findLxcId(name);
 
     if (!id) {
-        std::cout << "\nUnknown LXC: " << name << std::endl;
+        std::cout << "Unknown LXC: " << name << std::endl;
         return 1;
     }
 
@@ -82,7 +80,7 @@ int doAction(const std::string &argument, const std::string &name) {
     const int result = std::system(cmd.c_str());
 
     if (result != 0) {
-        std::cerr << "\nCommand failed\n";
+        std::cerr << "Command failed" << std::endl;;
         return 1;
     }
 
@@ -113,21 +111,21 @@ int main(const int argc, char *argv[]) {
     }
 
     switch (*action) {
-        case Enums::Action::START:
+        case Action::START:
             if (typeArg == "lxc") {
-                std::cout << "Starting ";
+                std::cout << "Starting";
                 return doAction("pct start", nameArg);
             }
             return 1;
-        case Enums::Action::STOP:
+        case Action::STOP:
             if (typeArg == "lxc") {
-                std::cout << "Stopping ";
+                std::cout << "Stopping";
                 return doAction("pct shutdown", nameArg);
             }
             return 1;
-        case Enums::Action::FORCE_STOP:
+        case Action::FORCE_STOP:
             if (typeArg == "lxc") {
-                std::cout << "Stopping (with force) ";
+                std::cout << "Stopping (with force)";
                 return doAction("pct stop", nameArg);
             }
             return 1;
